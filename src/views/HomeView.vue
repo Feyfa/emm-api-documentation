@@ -1,9 +1,9 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <div>
+    <h1 class="text-green-500 text-xl underline italic">Exatch Match Marketing</h1>
+  </div>
 </template>
