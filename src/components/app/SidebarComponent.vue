@@ -1,35 +1,65 @@
 <script setup>
-import { reactive, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { reactive, ref, onMounted } from 'vue';
+import { RouterLink, useRouter } from 'vue-router';
+
+const router = useRouter();
 
 // data
 const hamburgerMenu = ref(null);
 const isSidebarOpen = ref(false);
-const sidebarData = reactive([
+const sidebarData = ref([
     {
+        id: 0,
         open: false,
-        title: 'Client',
-        slug: 'client',
+        userType: ['root'],
+        title: 'User Agency',
+        slug: 'user-agency',
         child: [
             {
                 method: 'POST',
-                name: 'Create Client',
-                slug: 'create-client'
+                name: 'Create User Agency',
+                slug: 'create-user-agency'
             },
             {
                 method: 'PUT',
-                name: 'Update Client',
-                slug: 'update-client'
+                name: 'Update User Agency',
+                slug: 'update-user-agency'
             },
             {
                 method: 'POST',
-                name: 'Login SSO',
-                slug: 'login-sso'
+                name: 'Login SSO Agency',
+                slug: 'login-sso-agency'
             }
         ]
     },
     {
+        id: 1,
         open: false,
+        userType: ['agency'],
+        title: 'User Client',
+        slug: 'user-client',
+        child: [
+            {
+                method: 'POST',
+                name: 'Create User Client',
+                slug: 'create-user-client'
+            },
+            {
+                method: 'PUT',
+                name: 'Update User Client',
+                slug: 'update-user-client'
+            },
+            {
+                method: 'POST',
+                name: 'Login SSO Client',
+                slug: 'login-sso-client'
+            }
+        ]
+    },
+    {
+        id: 2,
+        open: false,
+        userType: ['agency'],
         title: 'Campaign',
         slug: 'campaign',
         child: [
@@ -56,7 +86,9 @@ const sidebarData = reactive([
         ]
     },
     {
+        id: 3,
         open: false,
+        userType: ['agency','root'],
         title: 'General Setting',
         slug: 'general-setting',
         child: [
@@ -83,6 +115,19 @@ const sidebarData = reactive([
         ]
     },
 ]);
+const sidebarDataFilter = ref([]);
+
+const selectUserType = ref('root');
+const userTypes = reactive([
+    {
+        label: 'Root',
+        value: 'root'
+    },
+    {
+        label: 'Agency',
+        value: 'agency'
+    },
+]);
 // data
 
 // method
@@ -90,10 +135,37 @@ const hamburgerMenuToggle = () => {
     isSidebarOpen.value = !isSidebarOpen.value;
 }
 
-const sidebarChildToggle = (index) => {
-    sidebarData[index].open = !sidebarData[index].open;
+const sidebarChildToggle = (id) => {
+    const index = sidebarDataFilter.value.findIndex(item => item.id == id);
+    sidebarDataFilter.value[index].open = !sidebarDataFilter.value[index].open;
+}
+
+const filterSidebarData = (userType) => {
+    sidebarData.value.forEach(item => item.open = false);
+    sidebarDataFilter.value = sidebarData.value.filter(item => item.userType.includes(userType));
+
+    router.push('/');
+}
+
+const userTypeChange = () => {
+    localStorage.setItem('userType', selectUserType.value);
+    filterSidebarData(selectUserType.value);
 }
 // method
+
+// mounted
+onMounted(() => {
+    let userType_LocalStorege = localStorage.getItem('userType');
+    if(!['root','agency'].includes(userType_LocalStorege)) {
+        localStorage.setItem('userType','root');
+        userType_LocalStorege = localStorage.getItem('userType');
+    }
+    
+    selectUserType.value = userType_LocalStorege;
+
+    filterSidebarData(selectUserType.value);
+});
+// mounted
 
 </script>
 
@@ -108,10 +180,30 @@ const sidebarChildToggle = (index) => {
     <div 
         class="sidebar bg-[rgb(148,36,52)] text-white overflow-x-hidden absolute top-0 bottom-0 left-0 z-[9] lg:static lg:z-0 lg:w-[25%] lg:pl-2.5 xl:w-[20%] 2xl:w-[17%]"
         :class="{'w-[80%] sm400:w-[65%] sm500:w-[50%] sm:w-[40%] md:w-[35%] pl-2.5 shadow-xl': isSidebarOpen, 'w-[0] pl-0 shadow-none': !isSidebarOpen}">
-        <h1 class="text-start my-5 text-xl font-semibold">Emm Api</h1>
+        
+        <div class="my-6 w-max">
+            <router-link to="/">
+                <h1 class="text-start text-lg font-semibold">Exatch Match Marketing Api</h1>
+            </router-link>
+
+            <el-select
+                class="mt-3"
+                v-model="selectUserType"
+                placeholder="Select"
+                size="medium"
+                @change="userTypeChange">
+                <el-option
+                    v-for="item in userTypes"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                />
+            </el-select>
+        </div>        
+        
         <ul class="flex flex-col gap-1.5">
-            <li v-for="(items, index) in sidebarData" :key="index">
-                <div class="tracking-wide transition duration-200 cursor-pointer flex items-center gap-3" @click="sidebarChildToggle(index)">
+            <li v-for="(items, index) in sidebarDataFilter" :key="index">
+                <div class="tracking-wide transition duration-200 cursor-pointer flex items-center gap-3" @click="sidebarChildToggle(items.id)">
                     <span class="mt-0.5">
                         <i 
                             class="fa-solid fa-caret-up fa-sm"
@@ -124,7 +216,7 @@ const sidebarChildToggle = (index) => {
                     class="pl-3 sm400:pl-5 mt-1" 
                     :class="{'h-full': items.open, 'h-0 overflow-hidden': !items.open}">
                     <li v-for="child in items.child" class="flex items-center h-[1.9rem]">
-                        <router-link :to="`/${items.slug}/${child.slug}`" class="flex items-center gap-2">
+                        <router-link :to="`/${selectUserType}/${items.slug}/${child.slug}`" class="flex items-center gap-2">
                             <span 
                                 class="text-[.6rem] mt-[1px] tracking-wider font-bold w-7"
                                 :class="{'text-green-500': child.method == 'GET', 'text-blue-500': child.method == 'PUT', 'text-yellow-500': child.method == 'POST', 'text-red-500': child.method == 'DEL'}">

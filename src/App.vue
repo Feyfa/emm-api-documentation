@@ -8,7 +8,7 @@ import SidebarComponent from './components/app/SidebarComponent.vue';
     
     <SidebarComponent />
 
-    <div class="pt-8 pb-10 h-screen px-4 w-full lg:w-[75%] lg:overflow-y-auto lg:px-10 xl:w-[80%] xl:px-20 2xl:w-[83%]">
+    <div class="p-[1.6rem] h-screen w-full lg:w-[75%] lg:overflow-y-auto xl:w-[80%] 2xl:w-[83%]">
       <RouterView />
     </div>
   
