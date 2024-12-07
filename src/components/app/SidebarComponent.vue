@@ -1,15 +1,30 @@
 <script setup>
-import { reactive, ref, onMounted } from 'vue';
+import { reactive, ref, onMounted, watch } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
+import { initStore } from '@/stores/store';
 
 const router = useRouter();
+const store = initStore();
 
-// data
+// const store = store();
 const hamburgerMenu = ref(null);
-const isSidebarOpen = ref(false);
 const sidebarData = ref([
     {
         id: 0,
+        open: false,
+        userType: ['agency','root'],
+        title: 'Getting Started',
+        slug: 'getting-started',
+        child: [
+            {
+                method: 'POST',
+                name: 'Create Token',
+                slug: 'create-token'
+            },
+        ]
+    },
+    {
+        id: 1,
         open: false,
         userType: ['root'],
         title: 'User Agency',
@@ -33,7 +48,7 @@ const sidebarData = ref([
         ]
     },
     {
-        id: 1,
+        id: 2,
         open: false,
         userType: ['agency'],
         title: 'User Client',
@@ -57,7 +72,7 @@ const sidebarData = ref([
         ]
     },
     {
-        id: 2,
+        id: 3,
         open: false,
         userType: ['agency'],
         title: 'Campaign',
@@ -86,7 +101,7 @@ const sidebarData = ref([
         ]
     },
     {
-        id: 3,
+        id: 4,
         open: false,
         userType: ['agency','root'],
         title: 'General Setting',
@@ -132,7 +147,7 @@ const userTypes = reactive([
 
 // method
 const hamburgerMenuToggle = () => {
-    isSidebarOpen.value = !isSidebarOpen.value;
+    store.isSidebarOpen = !store.isSidebarOpen;
 }
 
 const sidebarChildToggle = (id) => {
@@ -143,24 +158,21 @@ const sidebarChildToggle = (id) => {
 const filterSidebarData = (userType) => {
     sidebarData.value.forEach(item => item.open = false);
     sidebarDataFilter.value = sidebarData.value.filter(item => item.userType.includes(userType));
-
-    router.push('/');
 }
 
 const userTypeChange = () => {
     localStorage.setItem('userType', selectUserType.value);
     filterSidebarData(selectUserType.value);
+
+    store.isSidebarOpen = false;
+    
+    router.push('/');
 }
 // method
 
 // mounted
 onMounted(() => {
-    let userType_LocalStorege = localStorage.getItem('userType');
-    if(!['root','agency'].includes(userType_LocalStorege)) {
-        localStorage.setItem('userType','root');
-        userType_LocalStorege = localStorage.getItem('userType');
-    }
-    
+    const userType_LocalStorege = localStorage.getItem('userType');
     selectUserType.value = userType_LocalStorege;
 
     filterSidebarData(selectUserType.value);
@@ -173,14 +185,14 @@ onMounted(() => {
     <span class="hamburger-menu fixed top-3 right-3 z-[10] lg:hidden">
         <i 
             ref="hamburgerMenu"
-            :class="{'cursor-pointer fa-solid fa-xmark text-[1.7rem]': isSidebarOpen, 'cursor-pointer fa-solid fa-bars text-[1.7rem]': !isSidebarOpen}" 
-            @click="hamburgerMenuToggle">
+            :class="{'cursor-pointer fa-solid fa-xmark text-[1.7rem]': store.isSidebarOpen, 'cursor-pointer fa-solid fa-bars text-[1.7rem]': !store.isSidebarOpen}" 
+            @click.stop="hamburgerMenuToggle">
         </i>
     </span>
     <div 
         class="sidebar bg-[rgb(148,36,52)] text-white overflow-x-hidden absolute top-0 bottom-0 left-0 z-[9] lg:static lg:z-0 lg:w-[25%] lg:pl-2.5 xl:w-[20%] 2xl:w-[17%]"
-        :class="{'w-[80%] sm400:w-[65%] sm500:w-[50%] sm:w-[40%] md:w-[35%] pl-2.5 shadow-xl': isSidebarOpen, 'w-[0] pl-0 shadow-none': !isSidebarOpen}">
-        
+        :class="{'w-[80%] sm400:w-[65%] sm500:w-[50%] sm:w-[40%] md:w-[35%] pl-2.5 shadow-xl': store.isSidebarOpen, 'w-[0] pl-0 shadow-none': !store.isSidebarOpen}"
+        @click.stop>
         <div class="my-6 w-max">
             <router-link to="/">
                 <h1 class="text-start text-lg font-semibold">Exatch Match Marketing Api</h1>
