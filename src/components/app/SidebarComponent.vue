@@ -172,7 +172,7 @@ const userTypeChange = () => {
 
 // mounted
 onMounted(() => {
-    const userType_LocalStorege = localStorage.getItem('userType');
+    const userType_LocalStorege = localStorage.getItem('userType') || 'root';
     selectUserType.value = userType_LocalStorege;
 
     filterSidebarData(selectUserType.value);
@@ -190,12 +190,12 @@ onMounted(() => {
         </i>
     </span>
     <div 
-        class="sidebar bg-[rgb(148,36,52)] text-white overflow-x-hidden absolute top-0 bottom-0 left-0 z-[9] lg:static lg:z-0 lg:w-[25%] lg:pl-2.5 xl:w-[20%] 2xl:w-[17%]"
-        :class="{'w-[80%] sm400:w-[65%] sm500:w-[50%] sm:w-[40%] md:w-[35%] pl-2.5 shadow-xl': store.isSidebarOpen, 'w-[0] pl-0 shadow-none': !store.isSidebarOpen}"
+        class="sidebar bg-[rgb(148,36,52)] text-white overflow-x-hidden absolute top-0 bottom-0 left-0 z-[9] lg:static lg:z-0 lg:w-[30%] lg:pl-2.5 xl:w-[25%] 2xl:w-[20%]"
+        :class="{'w-[80%] sm400:w-[70%] sm500:w-[60%] sm:w-[50%] md:w-[40%] pl-2.5 shadow-xl': store.isSidebarOpen, 'w-[0] pl-0 shadow-none': !store.isSidebarOpen}"
         @click.stop>
         <div class="my-6 w-max">
             <router-link to="/">
-                <h1 class="text-start text-lg font-semibold">Exatch Match Marketing Api</h1>
+                <h1 class="text-start text-base sm400:text-lg font-semibold">Exatch Match Marketing Api</h1>
             </router-link>
 
             <el-select
@@ -213,7 +213,7 @@ onMounted(() => {
             </el-select>
         </div>        
         
-        <ul class="flex flex-col gap-1.5">
+        <ul class="flex flex-col gap-1.5 text-base">
             <li v-for="(items, index) in sidebarDataFilter" :key="index">
                 <div class="tracking-wide transition duration-200 cursor-pointer flex items-center gap-3" @click="sidebarChildToggle(items.id)">
                     <span class="mt-0.5">
@@ -225,7 +225,7 @@ onMounted(() => {
                     <span>{{ items.title }}</span>
                 </div>
                 <ul 
-                    class="pl-3 sm400:pl-5 mt-1" 
+                    class="pl-3 sm500:pl-5 mt-1" 
                     :class="{'h-full': items.open, 'h-0 overflow-hidden': !items.open}">
                     <li v-for="child in items.child" class="flex items-center h-[1.9rem]">
                         <router-link :to="`/${selectUserType}/${items.slug}/${child.slug}`" class="flex items-center gap-2">

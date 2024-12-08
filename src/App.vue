@@ -24,7 +24,7 @@ const globalClick = () => {
     
     <SidebarComponent />
 
-    <div class="pt-10 pb-5 px-4 overflow-y-auto sm500:px-6 md:px-8 xl:px-10 2xl:px-12 h-screen w-full lg:w-[75%] xl:w-[80%] 2xl:w-[83%]">
+    <div class="pt-10 pb-5 px-4 overflow-y-auto sm500:px-6 md:px-8 xl:px-10 2xl:px-12 h-screen w-full lg:w-[70%] xl:w-[85%] 2xl:w-[80%]">
       <RouterView />
     </div>
   
