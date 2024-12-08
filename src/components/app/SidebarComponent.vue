@@ -1,7 +1,7 @@
 <script setup>
-import { reactive, ref, onMounted, watch } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
-import { initStore } from '@/stores/store';
+import { initStore } from '@/stores/initStore';
 
 const router = useRouter();
 const store = initStore();

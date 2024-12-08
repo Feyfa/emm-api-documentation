@@ -1,8 +1,7 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import SidebarComponent from './components/app/SidebarComponent.vue';
-import { initStore } from './stores/store';
-import { onBeforeMount, onMounted } from 'vue';
+import { initStore } from './stores/initStore';
 
 const store = initStore();
 

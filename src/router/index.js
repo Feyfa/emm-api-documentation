@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { initStore } from '@/stores/initStore';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,11 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  const store = initStore();
+  if(store.isSidebarOpen) {
+    store.isSidebarOpen = false;
+  }
+  
   const userType_LocalStorege = localStorage.getItem('userType');
   const userTypes = ['root','agency'];
   if(!userTypes.includes(userType_LocalStorege)) {

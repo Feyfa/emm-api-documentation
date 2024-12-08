@@ -1,8 +1,8 @@
 <script setup>
 import rootApiKeyImage from "@/assets/img/agency/api-key.png";
 import { ElNotification } from "element-plus";
-import { onMounted, ref } from "vue";
-import { initStore } from "@/stores/store";
+import { ref } from "vue";
+import { initStore } from "@/stores/initStore";
 
 const store = initStore();
 
