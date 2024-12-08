@@ -12,7 +12,9 @@ const restApi = ref([
     id: 0,
     name: 'Create Token',
     slug: 'create-token',
-    url: 'https://app.emmsandbox.com/api/v1/developer/create/token',
+    endpoint: '/create/token',
+    url: 'https://data.emmsandbox.com/api/v1/developer/create/token',
+    method: 'POST',
     open: false,
     response: {
       status: 'success',
@@ -83,7 +85,7 @@ const copyJson = (value) => {
       <p class="mt-2">
         Before using other APIs, you need to create a token using your Client ID and Secret ID. 
         If you do not have a Client ID and Secret ID, you must first register as an agency on the 
-        <a target="_blank" href="https://app.emmsandbox.com/agency-register" class="underline italic text-blue-700">Exatch Match Marketing</a> 
+        <a target="_blank" href="https://data.emmsandbox.com/agency-register" class="underline italic text-blue-700">Exatch Match Marketing</a> 
         website. This token will expire after 30 minutes. When the token expires, you will need to create a new one. 
         The generated token will be used as the Bearer Token.
       </p>
@@ -97,6 +99,7 @@ const copyJson = (value) => {
 
     <section class="mt-7">
       <article class="flex flex-col justify-center md:flex-row gap-5 md:gap-10">
+        <!-- PARAMETER -->
         <div class="w-full md:w-[35%] flex flex-col gap-4">
           <div class="w-full">
             <div class="border-b border-b-neutral-400 pb-1">
@@ -121,16 +124,20 @@ const copyJson = (value) => {
             </ul>
           </div>
         </div>
-  
+        <!-- PARAMETER -->
+
+        <!-- ROUTE -->
         <div class="w-full md:w-[65%] flex flex-col justify-start gap-2">
           <!-- KOTAK ROUTE -->
           <div class="relative">
             <div class="h-12 px-2 flex justify-start items-center gap-3 bg-[rgb(17,23,26)] text-white cursor-pointer rounded" @click="openFullUrl">
-              <p class="border border-neutral-500 bg-yellow-500 p-0.5">
-                POST
+              <p 
+                class="border border-neutral-800 p-0.5"
+                :class="{'bg-yellow-500': restApi[0].method == 'POST'}">
+                {{ restApi[0].method }}
               </p>
               <p class="text-base -mt-0.5">
-                /create/token
+                {{ restApi[0].endpoint }}
               </p>
               <p class="ml-auto">
                 <i 
@@ -143,7 +150,7 @@ const copyJson = (value) => {
             <div 
               class="absolute bg-white text-sm w-full z-[9]"
               :class="{'h-0 overflow-hidden': !restApi[0].open, 'h-max border border-neutral-700 rounded': restApi[0].open}">
-              <p class="break-all cursor-pointer py-2 px-2 hover:bg-[rgba(240,240,240)]" @click="copyUrl(restApi[0].url)">{{ restApi[0].url }}</p>
+              <p class="break-all cursor-pointer py-2 px-2 hover:bg-[rgba(230,230,230)]" @click="copyUrl(restApi[0].url)">{{ restApi[0].url }}</p>
             </div>
           </div>
           <!-- KOTAK ROUTE -->
@@ -168,16 +175,16 @@ const copyJson = (value) => {
                     {
                   </div>
                   <div class="pl-8">
-                    "status": "success",
+                    "status": "{{ restApi[0].response.status }}",
                   </div>
                   <div class="pl-8">
-                    "token": "20afd8972da5b1f8b0cd9f561281715c7a27aa37f6dda23817dd909124e8355c0e54e0b287e341ef",
+                    "token": "{{ restApi[0].response.token }}",
                   </div>
                   <div class="pl-8">
-                    "expired_at": 1733540670
+                    "expired_at": {{ restApi[0].response.expired_at }},
                   </div>
                   <div class="pl-8">
-                    "status_code": 200
+                    "status_code": {{ restApi[0].response.status_code }}
                   </div>
                   <div>
                     }
@@ -188,6 +195,7 @@ const copyJson = (value) => {
           </div>
           <!-- KOTAK RESPONSE -->
         </div>
+        <!-- ROUTE -->
       </article>
     </section>
 

@@ -15,11 +15,23 @@ const router = createRouter({
     {
       path: '/agency/getting-started/create-token',
       name: 'agency_gettingstarted_createtoken',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/agency/CreateToken.vue'),
     },
+    {
+      path: '/agency/user-client/create-user-client',
+      name: 'agency_userclient_createuserclient',
+      component: () => import('../views/agency/CreateClient.vue')
+    },
+    {
+      path: '/agency/user-client/update-user-client',
+      name: 'agency_userclient_updateuserclient',
+      component: () => import('../views/agency/UpdateClient.vue')
+    },
+    {
+      path: '/agency/user-client/login-sso-client',
+      name: 'agency_userclient_loginssoclient',
+      component: () => import('../views/agency/LoginSsoClient.vue')
+    }
   ],
 })
 
