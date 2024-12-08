@@ -14,6 +14,9 @@ export default {
         '4xl': '2560px',
       },
     },
+    fontFamily: {
+      'poppins': ['Poppins', 'sans-serif']
+    }
   },
   plugins: [],
 }
