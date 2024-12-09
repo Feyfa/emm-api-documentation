@@ -168,6 +168,33 @@ const userTypeChange = () => {
     
     router.push('/');
 }
+
+/**
+ * digunakan untuk membuka module sesuai path yang dibuka saat di refresh
+ */
+const openSidebarCurrent = () => {
+    const currentPath = window.location.pathname;
+
+    console.log(currentPath);
+
+    sidebarData.value.forEach((item) => {
+        // Reset semua open ke false terlebih dahulu
+        item.open = false;
+
+        // Cari indeks userType yang cocok
+        const matchedIndex = item.userType.findIndex(userType => currentPath.startsWith(`/${userType}/${item.slug}`));
+
+        if (matchedIndex !== -1) {
+            // Jika ditemukan, lanjutkan ke child
+            item.child.forEach((child) => {
+                if (currentPath === `/${item.userType[matchedIndex]}/${item.slug}/${child.slug}`) {
+                    // Set open ke true jika cocok
+                    item.open = true;
+                }
+            });
+        }
+    });
+};
 // method
 
 // mounted
@@ -176,6 +203,8 @@ onMounted(() => {
     selectUserType.value = userType_LocalStorege;
 
     filterSidebarData(selectUserType.value);
+
+    openSidebarCurrent();
 });
 // mounted
 
