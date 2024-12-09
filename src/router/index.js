@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
   const userType_LocalStorege = localStorage.getItem('userType');
   const userTypes = ['root','agency'];
   if(!userTypes.includes(userType_LocalStorege)) {
-    localStorage.setItem('userType','root');
+    localStorage.setItem('userType','agency');
   }
 
   next();

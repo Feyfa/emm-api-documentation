@@ -172,7 +172,7 @@ const userTypeChange = () => {
 
 // mounted
 onMounted(() => {
-    const userType_LocalStorege = localStorage.getItem('userType') || 'root';
+    const userType_LocalStorege = localStorage.getItem('userType') || 'agency';
     selectUserType.value = userType_LocalStorege;
 
     filterSidebarData(selectUserType.value);
