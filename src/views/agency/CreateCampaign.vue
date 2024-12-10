@@ -166,7 +166,7 @@ const copyJson = (index) => {
             </p>
         </section>
 
-        <section class="py-7 border-b-2 border-black">
+        <section class="py-7 border-b border-black">
             <article>
                 <h1 class="text-xl font-semibold">1. Campaign Local</h1>
             </article>
@@ -431,7 +431,7 @@ const copyJson = (index) => {
             </article>
         </section>
 
-        <section class="py-7 border-b-2 border-black">
+        <section class="py-7 border-b border-black">
             <article>
                 <h1 class="text-xl font-semibold">2. Campaign Locator</h1>
             </article>
