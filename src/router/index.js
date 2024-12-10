@@ -31,7 +31,12 @@ const router = createRouter({
       path: '/agency/user-client/login-sso-client',
       name: 'agency_userclient_loginssoclient',
       component: () => import('../views/agency/LoginSsoClient.vue')
-    }
+    },
+    {
+      path: '/agency/campaign/create-campaign',
+      name: 'agency_campaign_createcampaign',
+      component: () => import('../views/agency/CreateCampaign.vue')
+    },
   ],
 })
 

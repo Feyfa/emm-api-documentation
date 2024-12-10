@@ -175,8 +175,6 @@ const userTypeChange = () => {
 const openSidebarCurrent = () => {
     const currentPath = window.location.pathname;
 
-    console.log(currentPath);
-
     sidebarData.value.forEach((item) => {
         // Reset semua open ke false terlebih dahulu
         item.open = false;
