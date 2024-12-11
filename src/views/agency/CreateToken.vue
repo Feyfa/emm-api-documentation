@@ -8,69 +8,82 @@ const store = initStore();
 
 // variabel
 const restApi = ref([
-  {
-    id: 0,
-    name: 'Create Token',
-    slug: 'create-token',
-    endpoint: '/create/token',
-    url: 'https://data.emmsandbox.com/api/v1/developer/create/token',
-    method: 'POST',
-    open: false,
-    response: {
-      status: 'success',
-      token: "20afd8972da5b1f8b0cd9f561281715c7a27aa37f6dda23817dd909124e8355c0e54e0b287e341ef",
-      expired_at: 1733540670,
-      status_code: 200,
-    },
-    iconclipboard: 'fa-solid fa-clipboard'
-  }
+    {
+        id: 0,
+        name: 'Create Token',
+        slug: 'create-token',
+        endpoint: '/create/token',
+        url: 'https://data.emmsandbox.com/api/v1/developer/create/token',
+        method: 'POST',
+        open: false,
+        request: {
+            client_id: "20afd8972da5b1f",
+            secret_id: "3f57c0982b9f657cb61b027b254db9d8f927b6e1c6745cf38cf8",
+        },
+        response: {
+            status: 'success',
+            token: "20afd8972da5b1f8b0cd9f561281715c7a27aa37f6dda23817dd909124e8355c",
+            expired_at: 1733540670,
+            status_code: 200,
+        },
+        iconclipboard: {
+            request: 'fa-solid fa-clipboard',
+            response: 'fa-solid fa-clipboard',
+        }
+    }
 ]);
 // variabel
 
 // method
-const openFullUrl = () => {
-  restApi.value[0].open = !restApi.value[0].open;
+const openFullUrl = (index) => {
+    restApi.value[index].open = !restApi.value[index].open;
 }
 
-const copyUrl = (value) => {
-  const textarea = document.createElement("textarea");
-  textarea.value = value;
-  document.body.appendChild(textarea);
-  textarea.select();
-  
-  try {
-    document.execCommand("copy");
-    ElNotification({ type: "success", title: 'Success', message: 'Copy Clipboard Success' });
-  } catch (err) {
-    console.error("Failed to copy text: ", err);
-    ElNotification({ type: "error", title: 'Error', message: err });
-  }
+const copyUrl = (index) => {
+    const url = restApi.value[index].url;
 
-  document.body.removeChild(textarea);
+    const textarea = document.createElement("textarea");
+    textarea.value = url;
+    document.body.appendChild(textarea);
+    textarea.select();
+    
+    try {
+        document.execCommand("copy");
+        ElNotification({ type: "success", title: 'Success', message: 'Copy Clipboard Success' });
+    } catch (err) {
+        console.error("Failed to copy text: ", err);
+        ElNotification({ type: "error", title: 'Error', message: err });
+    }
+
+    restApi.value[index].open = false;
+
+    document.body.removeChild(textarea);
 }
 
-const copyJson = (value) => {
-  const textarea = document.createElement("textarea");
-  textarea.value = JSON.stringify(value, null, 2);
-  document.body.appendChild(textarea);
-  textarea.select();
-  
-  try {
-    document.execCommand("copy");
+const copyJson = (index, value) => {
+    const json = restApi.value[index][value];
 
-    restApi.value[0].iconclipboard = 'fa-solid fa-clipboard-check';
-    ElNotification({ type: "success", title: 'Success', message: 'Copy Clipboard Success' });
+    const textarea = document.createElement("textarea");
+    textarea.value = JSON.stringify(json, null, 2);
+    document.body.appendChild(textarea);
+    textarea.select();
 
-    setTimeout(() => {
-      restApi.value[0].iconclipboard = 'fa-solid fa-clipboard';
-    }, 1000);
+    try {
+        document.execCommand("copy");
 
-  } catch (err) {
-    console.error("Failed to copy text: ", err);
-    ElNotification({ type: "error", title: 'Error', message: err });
-  }
+        restApi.value[index].iconclipboard[value] = 'fa-solid fa-clipboard-check';
+        ElNotification({ type: "success", title: 'Success', message: 'Copy Clipboard Success' });
 
-  document.body.removeChild(textarea);
+        setTimeout(() => {
+            restApi.value[index].iconclipboard[value] = 'fa-solid fa-clipboard';
+        }, 1000);
+
+    } catch (err) {
+        console.error("Failed to copy text: ", err);
+        ElNotification({ type: "error", title: 'Error', message: err });
+    }
+
+    document.body.removeChild(textarea);
 }
 // method
 
@@ -80,120 +93,116 @@ const copyJson = (value) => {
   <main>
 
     <section>
-      <h1 class="text-3xl font-semibold">Create Token</h1>
-  
-      <p class="mt-2">
-        Before using other APIs, you need to create a token using your Client ID and Secret ID. 
-        If you do not have a Client ID and Secret ID, you must first register as an agency on the 
-        <a target="_blank" href="https://data.emmsandbox.com/agency-register" class="underline italic text-blue-700">Exatch Match Marketing</a> 
-        website. This token will expire after 30 minutes. When the token expires, you will need to create a new one. 
-        The generated token will be used as the Bearer Token.
-      </p>
+        <h1 class="text-3xl font-semibold">Create Token</h1>
+    
+        <p class="mt-2">
+            Before using other APIs, you need to create a token using your Client ID and Secret ID. 
+            If you do not have a Client ID and Secret ID, you must first register as an agency on the 
+            <a target="_blank" href="https://data.emmsandbox.com/agency-register" class="underline italic text-blue-700">Exatch Match Marketing</a> 
+            website. This token will expire after 30 minutes. When the token expires, you will need to create a new one. 
+            The generated token will be used as the Bearer Token.
+        </p>
     </section>
 
     <section class="mt-7">
-      <article class="">
-        <img :src="rootApiKeyImage" alt="">
-      </article>
+        <article class="">
+            <img :src="rootApiKeyImage" alt="">
+        </article>
     </section>
 
     <section class="mt-7">
       <article class="flex flex-col justify-center md:flex-row gap-5 md:gap-10">
         <!-- PARAMETER -->
         <div class="w-full md:w-[35%] flex flex-col gap-4">
-          <div class="w-full">
-            <div class="border-b border-b-neutral-400 pb-1">
-              <h4 class="text-neutral-700">Body Parameter</h4>
+            <div class="w-full">
+                <div class="border-b border-b-neutral-400 pb-1">
+                    <h4 class="text-neutral-700">Body Parameter</h4>
+                </div>
+
+                <ul class="mt-2 class flex flex-col gap-1">
+                    <li>
+                        <h3>client_id</h3>
+                        <div class="pl-3">
+                            <h4>- required</h4>
+                            <h4>- text</h4>
+                        </div>    
+                    </li>
+                    <li>
+                        <h3>secret_id</h3>
+                        <div class="pl-3">
+                            <h4>- required</h4>
+                            <h4>- text</h4>
+                        </div>    
+                    </li>
+                </ul>
             </div>
-  
-            <ul class="mt-2 class flex flex-col gap-1">
-              <li>
-                <h3>client_id</h3>
-                <div class="pl-3">
-                  <h4>- required</h4>
-                  <h4>- text</h4>
-                </div>    
-              </li>
-              <li>
-                <h3>secret_id</h3>
-                <div class="pl-3">
-                  <h4>- required</h4>
-                  <h4>- text</h4>
-                </div>    
-              </li>
-            </ul>
-          </div>
         </div>
         <!-- PARAMETER -->
 
         <!-- ROUTE -->
         <div class="w-full md:w-[65%] flex flex-col justify-start gap-2">
-          <!-- KOTAK ROUTE -->
-          <div class="relative">
-            <div class="h-12 px-2 flex justify-start items-center gap-3 bg-[rgb(17,23,26)] text-white cursor-pointer rounded" @click="openFullUrl">
-              <p 
-                class="border border-neutral-800 p-0.5"
-                :class="{'bg-yellow-500': restApi[0].method == 'POST'}">
-                {{ restApi[0].method }}
-              </p>
-              <p class="text-base -mt-0.5">
-                {{ restApi[0].endpoint }}
-              </p>
-              <p class="ml-auto">
-                <i 
-                  class="fa-solid fa-angle-up"
-                  :class="{'fa-rotate-180': !restApi[0].open}">
-                </i>
-              </p>
+            <!-- KOTAK ROUTE -->
+            <div class="relative">
+                <div class="h-12 px-2 flex justify-start items-center gap-3 bg-[rgb(17,23,26)] text-white cursor-pointer rounded" @click="openFullUrl(0)">
+                    <p 
+                        class="border border-neutral-800 p-0.5"
+                        :class="{'bg-yellow-500': restApi[0].method == 'POST'}">
+                        {{ restApi[0].method }}
+                    </p>
+                    <p class="text-base -mt-0.5">
+                        {{ restApi[0].endpoint }}
+                    </p>
+                    <p class="ml-auto">
+                        <i 
+                        class="fa-solid fa-angle-up"
+                        :class="{'fa-rotate-180': !restApi[0].open}">
+                        </i>
+                    </p>
+                </div>
+                
+                <div 
+                    class="absolute bg-white text-sm w-full z-[9]"
+                    :class="{'h-0 overflow-hidden': !restApi[0].open, 'h-max border border-neutral-700 rounded': restApi[0].open}">
+                    <p class="break-all cursor-pointer py-2 px-2 hover:bg-[rgba(230,230,230)]" @click="copyUrl(0)">{{ restApi[0].url }}</p>
+                </div>
             </div>
-            
-            <div 
-              class="absolute bg-white text-sm w-full z-[9]"
-              :class="{'h-0 overflow-hidden': !restApi[0].open, 'h-max border border-neutral-700 rounded': restApi[0].open}">
-              <p class="break-all cursor-pointer py-2 px-2 hover:bg-[rgba(230,230,230)]" @click="copyUrl(restApi[0].url)">{{ restApi[0].url }}</p>
-            </div>
-          </div>
-          <!-- KOTAK ROUTE -->
+            <!-- KOTAK ROUTE -->
 
-
-          <!-- KOTAK RESPONSE -->
-          <div>
-            <div class="mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
-              <div class="flex justify-between items-center border-b border-b-slate-600 relative">
-                <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Response</span>
-                <i 
-                  :class="[
-                    restApi[0].iconclipboard,
-                    'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
-                  ]"
-                  @click="copyJson(restApi[0].response)">
-                </i>
-              </div>
-              <div class="overflow-auto font-medium p-3 text-sm">
-                <code class="break-all">
-                  <div>
-                    {
-                  </div>
-                  <div class="pl-8">
-                    "status": "{{ restApi[0].response.status }}",
-                  </div>
-                  <div class="pl-8">
-                    "token": "{{ restApi[0].response.token }}",
-                  </div>
-                  <div class="pl-8">
-                    "expired_at": {{ restApi[0].response.expired_at }},
-                  </div>
-                  <div class="pl-8">
-                    "status_code": {{ restApi[0].response.status_code }}
-                  </div>
-                  <div>
-                    }
-                  </div>
-                </code>
-              </div>
+            <!-- KOTAK REQUEST DAN RESPONSE -->
+            <div class="flex flex-col gap-2">
+                <div class="w-full mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
+                    <div class="flex justify-between items-center border-b border-b-slate-600 relative">
+                        <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Request</span>
+                        <i 
+                            :class="[
+                                restApi[0].iconclipboard.request,
+                                'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
+                            ]"
+                            @click="copyJson(0, 'request')">
+                        </i>
+                    </div>
+                    <div class="overflow-auto font-medium p-3 text-sm">
+                        <pre class="whitespace-pre-wrap break-words"><code>{{ JSON.stringify(restApi[0].request, null, 4) }}</code></pre>
+                    </div>
+                </div>
+                
+                <div class="w-full mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
+                    <div class="flex justify-between items-center border-b border-b-slate-600 relative">
+                        <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Response</span>
+                        <i 
+                            :class="[
+                                restApi[0].iconclipboard.response,
+                                'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
+                            ]"
+                            @click="copyJson(0, 'response')">
+                        </i>
+                    </div>
+                    <div class="overflow-auto font-medium p-3 text-sm">
+                        <pre class="whitespace-pre-wrap break-words"><code>{{ JSON.stringify(restApi[0].response, null, 4) }}</code></pre>
+                    </div>
+                </div>
             </div>
-          </div>
-          <!-- KOTAK RESPONSE -->
+            <!-- KOTAK REQUEST DAN RESPONSE -->
         </div>
         <!-- ROUTE -->
       </article>

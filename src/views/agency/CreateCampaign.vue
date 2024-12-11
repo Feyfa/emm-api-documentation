@@ -12,13 +12,21 @@ const restApi = ref([
         url: 'https://data.emmsandbox.com/api/v1/developer/create/campaign/local',
         method: 'POST',
         open: false,
+        request: {
+            email: 'dimas@gmail.com',
+            campaign_name: 'Campaign Dimas Local 1',
+            url: 'https://feyfa.github.io'
+        },
         response: {
             status: 'success',
             campaign_id: 11111111,
             message: 'Campaign Type Local Created Successfully',
             status_code: 200,
         },
-        iconclipboard: 'fa-solid fa-clipboard'
+        iconclipboard: {
+            request: 'fa-solid fa-clipboard',
+            response: 'fa-solid fa-clipboard',
+        }
     },
     {
         id: 1,
@@ -28,13 +36,21 @@ const restApi = ref([
         url: 'https://data.emmsandbox.com/api/v1/developer/create/campaign/local',
         method: 'POST',
         open: false,
+        request: {
+            user_id: 450,
+            campaign_name: 'Campaign Dimas Local 2',
+            url: 'https://feyfa.github.io'
+        },
         response: {
             status: 'success',
             campaign_id: 11111112,
             message: 'Campaign Type Local Created Successfully',
             status_code: 200,
         },
-        iconclipboard: 'fa-solid fa-clipboard'
+        iconclipboard: {
+            request: 'fa-solid fa-clipboard',
+            response: 'fa-solid fa-clipboard',
+        }
     },
     {
         id: 2,
@@ -44,13 +60,23 @@ const restApi = ref([
         url: 'https://data.emmsandbox.com/api/v1/developer/create/campaign/locator',
         method: 'POST',
         open: false,
+        request: {
+            email: 'dimas@gmail.com',
+            campaign_name:  'Campaign Dimas Locator 1',
+            search_keyword: 'home,selling,agency,fashion',
+            context_keyword: 'home,selling,agency,fashion',
+            end_date_campaign: '2025-12-12',
+        },
         response: {
             status: 'success',
             campaign_id: 11111113,
             message: 'Campaign Type Locator Created Successfully',
             status_code: 200,
         },
-        iconclipboard: 'fa-solid fa-clipboard'
+        iconclipboard: {
+            request: 'fa-solid fa-clipboard',
+            response: 'fa-solid fa-clipboard',
+        }
     },
     {
         id: 3,
@@ -60,13 +86,23 @@ const restApi = ref([
         url: 'https://data.emmsandbox.com/api/v1/developer/create/campaign/locator',
         method: 'POST',
         open: false,
+        request: {
+            user_id: 450,
+            campaign_name:  'Campaign Dimas Locator 2',
+            search_keyword: 'home,selling,agency,fashion',
+            context_keyword: 'home,selling,agency,fashion',
+            end_date_campaign: '2025-12-12',
+        },
         response: {
             status: 'success',
             campaign_id: 11111114,
             message: 'Campaign Type Locator Created Successfully',
             status_code: 200,
         },
-        iconclipboard: 'fa-solid fa-clipboard'
+        iconclipboard: {
+            request: 'fa-solid fa-clipboard',
+            response: 'fa-solid fa-clipboard',
+        }
     },
     {
         id: 4,
@@ -76,13 +112,21 @@ const restApi = ref([
         url: 'https://data.emmsandbox.com/api/v1/developer/create/campaign/enhance',
         method: 'POST',
         open: false,
+        request: {
+            email: 'dimas@gmail.com',
+            campaign_name: 'Campaign Dimas Enhance 1',
+            search_keyword: 'home,selling,agency,fashion'
+        },
         response: {
             status: 'success',
             campaign_id: 11111115,
             message: 'Campaign Type Enhance Created Successfully',
             status_code: 200,
         },
-        iconclipboard: 'fa-solid fa-clipboard'
+        iconclipboard: {
+            request: 'fa-solid fa-clipboard',
+            response: 'fa-solid fa-clipboard',
+        }
     },
     {
         id: 5,
@@ -92,20 +136,28 @@ const restApi = ref([
         url: 'https://data.emmsandbox.com/api/v1/developer/create/campaign/enhance',
         method: 'POST',
         open: false,
+        request: {
+            user_id: 450,
+            campaign_name: 'Campaign Dimas Enhance 2',
+            search_keyword: 'home,selling,agency,fashion'
+        },
         response: {
             status: 'success',
             campaign_id: 11111116,
             message: 'Campaign Type Enhance Created Successfully',
             status_code: 200,
         },
-        iconclipboard: 'fa-solid fa-clipboard'
+        iconclipboard: {
+            request: 'fa-solid fa-clipboard',
+            response: 'fa-solid fa-clipboard',
+        }
     },
 ]);
 // variabel
 
 // method
 const openFullUrl = (index) => {
-  restApi.value[index].open = !restApi.value[index].open;
+    restApi.value[index].open = !restApi.value[index].open;
 }
 
 const copyUrl = (index) => {
@@ -124,25 +176,27 @@ const copyUrl = (index) => {
         ElNotification({ type: "error", title: 'Error', message: err });
     }
 
+    restApi.value[index].open = false;
+
     document.body.removeChild(textarea);
 }
 
-const copyJson = (index) => {
-    const value = restApi.value[index].response;
+const copyJson = (index, value) => {
+    const json = restApi.value[index][value];
 
     const textarea = document.createElement("textarea");
-    textarea.value = JSON.stringify(value, null, 2);
+    textarea.value = JSON.stringify(json, null, 2);
     document.body.appendChild(textarea);
     textarea.select();
     
     try {
         document.execCommand("copy");
 
-        restApi.value[index].iconclipboard = 'fa-solid fa-clipboard-check';
+        restApi.value[index].iconclipboard[value] = 'fa-solid fa-clipboard-check';
         ElNotification({ type: "success", title: 'Success', message: 'Copy Clipboard Success' });
 
         setTimeout(() => {
-            restApi.value[index].iconclipboard = 'fa-solid fa-clipboard';
+            restApi.value[index].iconclipboard[value] = 'fa-solid fa-clipboard';
         }, 1000);
 
     } catch (err) {
@@ -258,44 +312,41 @@ const copyJson = (index) => {
                         </div>
                         <!-- KOTAK ROUTE -->
     
-                        <!-- KOTAK RESPONSE -->
-                        <div>
-                            <div class="mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
-                            <div class="flex justify-between items-center border-b border-b-slate-600 relative">
-                                <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Response</span>
-                                <i 
-                                :class="[
-                                    restApi[0].iconclipboard,
-                                    'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
-                                ]"
-                                @click="copyJson(0)">
-                                </i>
+                        <!-- KOTAK REQUEST DAN RESPONSE -->
+                        <div class="flex flex-col gap-2">
+                            <div class="w-full mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
+                                <div class="flex justify-between items-center border-b border-b-slate-600 relative">
+                                    <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Request</span>
+                                    <i 
+                                        :class="[
+                                            restApi[0].iconclipboard.request,
+                                            'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
+                                        ]"
+                                        @click="copyJson(0, 'request')">
+                                    </i>
+                                </div>
+                                <div class="overflow-auto font-medium p-3 text-sm">
+                                    <pre class="whitespace-pre-wrap break-words"><code>{{ JSON.stringify(restApi[0].request, null, 4) }}</code></pre>
+                                </div>
                             </div>
-                            <div class="overflow-auto font-medium p-3 text-sm">
-                                <code class="break-all">
-                                    <div>
-                                        {
-                                    </div>
-                                    <div class="pl-8">
-                                        "status": "{{ restApi[0].response.status }}",
-                                    </div>
-                                    <div class="pl-8">
-                                        "campaign_id": {{ restApi[0].response.campaign_id }},
-                                    </div>
-                                    <div class="pl-8">
-                                        "message": "{{ restApi[0].response.message }}",
-                                    </div>
-                                    <div class="pl-8">
-                                        "status_code": {{ restApi[0].response.status_code }}
-                                    </div>
-                                    <div>
-                                        }
-                                    </div>
-                                </code>
-                            </div>
+
+                            <div class="w-full mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
+                                <div class="flex justify-between items-center border-b border-b-slate-600 relative">
+                                    <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Response</span>
+                                    <i 
+                                        :class="[
+                                            restApi[0].iconclipboard.response,
+                                            'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
+                                        ]"
+                                        @click="copyJson(0, 'response')">
+                                    </i>
+                                </div>
+                                <div class="overflow-auto font-medium p-3 text-sm">
+                                    <pre class="whitespace-pre-wrap break-words"><code>{{ JSON.stringify(restApi[0].response, null, 4) }}</code></pre>
+                                </div>
                             </div>
                         </div>
-                        <!-- KOTAK RESPONSE -->
+                        <!-- KOTAK REQUEST DAN RESPONSE -->
                     </div>
                     <!-- ROUTE -->
                 </div>
@@ -380,51 +431,48 @@ const copyJson = (index) => {
                             </div>
                             
                             <div 
-                            class="absolute bg-white text-sm w-full z-[9]"
-                            :class="{'h-0 overflow-hidden': !restApi[1].open, 'h-max border border-neutral-700 rounded': restApi[1].open}">
+                                class="absolute bg-white text-sm w-full z-[9]"
+                                :class="{'h-0 overflow-hidden': !restApi[1].open, 'h-max border border-neutral-700 rounded': restApi[1].open}">
                                 <p class="break-all cursor-pointer py-2 px-2 hover:bg-[rgba(230,230,230)]" @click="copyUrl(1)">{{ restApi[1].url }}</p>
                             </div>
                         </div>
                         <!-- KOTAK ROUTE -->
     
-                        <!-- KOTAK RESPONSE -->
-                        <div>
-                            <div class="mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
-                            <div class="flex justify-between items-center border-b border-b-slate-600 relative">
-                                <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Response</span>
-                                <i 
-                                :class="[
-                                    restApi[1].iconclipboard,
-                                    'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
-                                ]"
-                                @click="copyJson(1)">
-                                </i>
+                        <!-- KOTAK REQUEST DAN RESPONSE -->
+                        <div class="flex flex-col gap-2">
+                            <div class="w-full mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
+                                <div class="flex justify-between items-center border-b border-b-slate-600 relative">
+                                    <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Request</span>
+                                    <i 
+                                    :class="[
+                                        restApi[1].iconclipboard.request,
+                                        'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
+                                    ]"
+                                    @click="copyJson(1, 'request')">
+                                    </i>
+                                </div>
+                                <div class="overflow-auto font-medium p-3 text-sm">
+                                    <pre class="whitespace-pre-wrap break-words"><code>{{ JSON.stringify(restApi[1].request, null, 4) }}</code></pre>
+                                </div>
                             </div>
-                            <div class="overflow-auto font-medium p-3 text-sm">
-                                <code class="break-all">
-                                    <div>
-                                        {
-                                    </div>
-                                    <div class="pl-8">
-                                        "status": "{{ restApi[1].response.status }}",
-                                    </div>
-                                    <div class="pl-8">
-                                        "campaign_id": {{ restApi[1].response.campaign_id }},
-                                    </div>
-                                    <div class="pl-8">
-                                        "message": "{{ restApi[1].response.message }}",
-                                    </div>
-                                    <div class="pl-8">
-                                        "status_code": {{ restApi[1].response.status_code }}
-                                    </div>
-                                    <div>
-                                        }
-                                    </div>
-                                </code>
-                            </div>
+
+                            <div class="w-full mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
+                                <div class="flex justify-between items-center border-b border-b-slate-600 relative">
+                                    <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Response</span>
+                                    <i 
+                                    :class="[
+                                        restApi[1].iconclipboard.response,
+                                        'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
+                                    ]"
+                                    @click="copyJson(1, 'response')">
+                                    </i>
+                                </div>
+                                <div class="overflow-auto font-medium p-3 text-sm">
+                                    <pre class="whitespace-pre-wrap break-words"><code>{{ JSON.stringify(restApi[1].response, null, 4) }}</code></pre>
+                                </div>
                             </div>
                         </div>
-                        <!-- KOTAK RESPONSE -->
+                        <!-- KOTAK REQUEST DAN RESPONSE -->
                     </div>
                     <!-- ROUTE -->
                 </div>
@@ -536,44 +584,41 @@ const copyJson = (index) => {
                         </div>
                         <!-- KOTAK ROUTE -->
     
-                        <!-- KOTAK RESPONSE -->
-                        <div>
-                            <div class="mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
-                            <div class="flex justify-between items-center border-b border-b-slate-600 relative">
-                                <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Response</span>
-                                <i 
-                                :class="[
-                                    restApi[2].iconclipboard,
-                                    'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
-                                ]"
-                                @click="copyJson(2)">
-                                </i>
+                        <!-- KOTAK REQUEST DAN RESPONSE -->
+                        <div class="flex flex-col gap-2">
+                            <div class="w-full mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
+                                <div class="flex justify-between items-center border-b border-b-slate-600 relative">
+                                    <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Request</span>
+                                    <i 
+                                    :class="[
+                                        restApi[2].iconclipboard.request,
+                                        'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
+                                    ]"
+                                    @click="copyJson(2, 'request')">
+                                    </i>
+                                </div>
+                                <div class="overflow-auto font-medium p-3 text-sm">
+                                    <pre class="whitespace-pre-wrap break-words"><code>{{ JSON.stringify(restApi[2].request, null, 4) }}</code></pre>
+                                </div>
                             </div>
-                            <div class="overflow-auto font-medium p-3 text-sm">
-                                <code class="break-all">
-                                    <div>
-                                        {
-                                    </div>
-                                    <div class="pl-8">
-                                        "status": "{{ restApi[2].response.status }}",
-                                    </div>
-                                    <div class="pl-8">
-                                        "campaign_id": {{ restApi[2].response.campaign_id }},
-                                    </div>
-                                    <div class="pl-8">
-                                        "message": "{{ restApi[2].response.message }}",
-                                    </div>
-                                    <div class="pl-8">
-                                        "status_code": {{ restApi[2].response.status_code }}
-                                    </div>
-                                    <div>
-                                        }
-                                    </div>
-                                </code>
-                            </div>
+
+                            <div class="w-full mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
+                                <div class="flex justify-between items-center border-b border-b-slate-600 relative">
+                                    <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Response</span>
+                                    <i 
+                                    :class="[
+                                        restApi[2].iconclipboard.response,
+                                        'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
+                                    ]"
+                                    @click="copyJson(2, 'response')">
+                                    </i>
+                                </div>
+                                <div class="overflow-auto font-medium p-3 text-sm">
+                                    <pre class="whitespace-pre-wrap break-words"><code>{{ JSON.stringify(restApi[2].response, null, 4) }}</code></pre>
+                                </div>
                             </div>
                         </div>
-                        <!-- KOTAK RESPONSE -->
+                        <!-- KOTAK REQUEST DAN RESPONSE -->
                     </div>
                     <!-- ROUTE -->
                 </div>
@@ -678,44 +723,41 @@ const copyJson = (index) => {
                         </div>
                         <!-- KOTAK ROUTE -->
     
-                        <!-- KOTAK RESPONSE -->
-                        <div>
-                            <div class="mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
-                            <div class="flex justify-between items-center border-b border-b-slate-600 relative">
-                                <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Response</span>
-                                <i 
-                                :class="[
-                                    restApi[3].iconclipboard,
-                                    'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
-                                ]"
-                                @click="copyJson(3)">
-                                </i>
+                        <!-- KOTAK REQUEST DAN RESPONSE -->
+                        <div class="flex flex-col gap-2">
+                            <div class="w-full mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
+                                <div class="flex justify-between items-center border-b border-b-slate-600 relative">
+                                    <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Request</span>
+                                    <i 
+                                        :class="[
+                                            restApi[3].iconclipboard.request,
+                                            'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
+                                        ]"
+                                        @click="copyJson(3, 'request')">
+                                    </i>
+                                </div>
+                                <div class="overflow-auto font-medium p-3 text-sm">
+                                    <pre class="whitespace-pre-wrap break-words"><code>{{ JSON.stringify(restApi[3].request, null, 4) }}</code></pre>
+                                </div>
                             </div>
-                            <div class="overflow-auto font-medium p-3 text-sm">
-                                <code class="break-all">
-                                    <div>
-                                        {
-                                    </div>
-                                    <div class="pl-8">
-                                        "status": "{{ restApi[3].response.status }}",
-                                    </div>
-                                    <div class="pl-8">
-                                        "campaign_id": {{ restApi[3].response.campaign_id }},
-                                    </div>
-                                    <div class="pl-8">
-                                        "message": "{{ restApi[3].response.message }}",
-                                    </div>
-                                    <div class="pl-8">
-                                        "status_code": {{ restApi[3].response.status_code }}
-                                    </div>
-                                    <div>
-                                        }
-                                    </div>
-                                </code>
-                            </div>
+
+                            <div class="w-full mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
+                                <div class="flex justify-between items-center border-b border-b-slate-600 relative">
+                                    <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Response</span>
+                                    <i 
+                                        :class="[
+                                            restApi[3].iconclipboard.response,
+                                            'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
+                                        ]"
+                                        @click="copyJson(3, 'response')">
+                                    </i>
+                                </div>
+                                <div class="overflow-auto font-medium p-3 text-sm">
+                                    <pre class="whitespace-pre-wrap break-words"><code>{{ JSON.stringify(restApi[3].response, null, 4) }}</code></pre>
+                                </div>
                             </div>
                         </div>
-                        <!-- KOTAK RESPONSE -->
+                        <!-- KOTAK REQUEST DAN RESPONSE -->
                     </div>
                     <!-- ROUTE -->
                 </div>
@@ -813,44 +855,41 @@ const copyJson = (index) => {
                         </div>
                         <!-- KOTAK ROUTE -->
     
-                        <!-- KOTAK RESPONSE -->
-                        <div>
-                            <div class="mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
-                            <div class="flex justify-between items-center border-b border-b-slate-600 relative">
-                                <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Response</span>
-                                <i 
-                                :class="[
-                                    restApi[4].iconclipboard,
-                                    'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
-                                ]"
-                                @click="copyJson(4)">
-                                </i>
+                        <!-- KOTAK REQUEST DAN RESPONSE -->
+                        <div class="flex flex-col gap-2">
+                            <div class="w-full mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
+                                <div class="flex justify-between items-center border-b border-b-slate-600 relative">
+                                    <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Request</span>
+                                    <i 
+                                    :class="[
+                                        restApi[4].iconclipboard.request,
+                                        'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
+                                    ]"
+                                    @click="copyJson(4, 'request')">
+                                    </i>
+                                </div>
+                                <div class="overflow-auto font-medium p-3 text-sm">
+                                    <pre class="whitespace-pre-wrap break-words"><code>{{ JSON.stringify(restApi[4].request, null, 4) }}</code></pre>
+                                </div>
                             </div>
-                            <div class="overflow-auto font-medium p-3 text-sm">
-                                <code class="break-all">
-                                    <div>
-                                        {
-                                    </div>
-                                    <div class="pl-8">
-                                        "status": "{{ restApi[4].response.status }}",
-                                    </div>
-                                    <div class="pl-8">
-                                        "campaign_id": {{ restApi[4].response.campaign_id }},
-                                    </div>
-                                    <div class="pl-8">
-                                        "message": "{{ restApi[4].response.message }}",
-                                    </div>
-                                    <div class="pl-8">
-                                        "status_code": {{ restApi[4].response.status_code }}
-                                    </div>
-                                    <div>
-                                        }
-                                    </div>
-                                </code>
-                            </div>
+
+                            <div class="w-full mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
+                                <div class="flex justify-between items-center border-b border-b-slate-600 relative">
+                                    <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Response</span>
+                                    <i 
+                                    :class="[
+                                        restApi[4].iconclipboard.response,
+                                        'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
+                                    ]"
+                                    @click="copyJson(4, 'response')">
+                                    </i>
+                                </div>
+                                <div class="overflow-auto font-medium p-3 text-sm">
+                                    <pre class="whitespace-pre-wrap break-words"><code>{{ JSON.stringify(restApi[4].response, null, 4) }}</code></pre>
+                                </div>
                             </div>
                         </div>
-                        <!-- KOTAK RESPONSE -->
+                        <!-- KOTAK REQUEST DAN RESPONSE -->
                     </div>
                     <!-- ROUTE -->
                 </div>
@@ -941,44 +980,41 @@ const copyJson = (index) => {
                         </div>
                         <!-- KOTAK ROUTE -->
     
-                        <!-- KOTAK RESPONSE -->
-                        <div>
-                            <div class="mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
-                            <div class="flex justify-between items-center border-b border-b-slate-600 relative">
-                                <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Response</span>
-                                <i 
-                                :class="[
-                                    restApi[5].iconclipboard,
-                                    'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
-                                ]"
-                                @click="copyJson(5)">
-                                </i>
+                        <!-- KOTAK REQUEST DAN RESPONSE -->
+                        <div class="flex flex-col gap-2">
+                            <div class="w-full mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
+                                <div class="flex justify-between items-center border-b border-b-slate-600 relative">
+                                    <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Request</span>
+                                    <i 
+                                        :class="[
+                                            restApi[5].iconclipboard.request,
+                                            'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
+                                        ]"
+                                        @click="copyJson(5, 'request')">
+                                    </i>
+                                </div>
+                                <div class="overflow-auto font-medium p-3 text-sm">
+                                    <pre class="whitespace-pre-wrap break-words"><code>{{ JSON.stringify(restApi[5].request, null, 4) }}</code></pre>
+                                </div>
                             </div>
-                            <div class="overflow-auto font-medium p-3 text-sm">
-                                <code class="break-all">
-                                    <div>
-                                        {
-                                    </div>
-                                    <div class="pl-8">
-                                        "status": "{{ restApi[5].response.status }}",
-                                    </div>
-                                    <div class="pl-8">
-                                        "campaign_id": {{ restApi[5].response.campaign_id }},
-                                    </div>
-                                    <div class="pl-8">
-                                        "message": "{{ restApi[5].response.message }}",
-                                    </div>
-                                    <div class="pl-8">
-                                        "status_code": {{ restApi[5].response.status_code }}
-                                    </div>
-                                    <div>
-                                        }
-                                    </div>
-                                </code>
-                            </div>
+                            
+                            <div class="w-full mx-auto border border-neutral-400 text-white bg-[rgb(17,23,26)] shadow-md rounded-md">
+                                <div class="flex justify-between items-center border-b border-b-slate-600 relative">
+                                    <span class="border-r border-r-slate-600 rounded-sm px-4 py-1 shadow-2xl">Response</span>
+                                    <i 
+                                        :class="[
+                                            restApi[5].iconclipboard.response,
+                                            'text-slate-300 cursor-pointer hover:text-slate-200 mr-2'
+                                        ]"
+                                        @click="copyJson(5, 'response')">
+                                    </i>
+                                </div>
+                                <div class="overflow-auto font-medium p-3 text-sm">
+                                    <pre class="whitespace-pre-wrap break-words"><code>{{ JSON.stringify(restApi[5].response, null, 4) }}</code></pre>
+                                </div>
                             </div>
                         </div>
-                        <!-- KOTAK RESPONSE -->
+                        <!-- KOTAK REQUEST DAN RESPONSE -->
                     </div>
                     <!-- ROUTE -->
                 </div>
