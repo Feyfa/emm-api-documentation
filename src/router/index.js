@@ -37,6 +37,11 @@ const router = createRouter({
       name: 'agency_campaign_createcampaign',
       component: () => import('../views/agency/campaign/CreateCampaign.vue')
     },
+    {
+      path: '/agency/campaign/update-campaign',
+      name: 'agency_campaign_updatecampaign',
+      component: () => import('../views/agency/campaign/UpdateCampaign.vue')
+    },
   ],
 })
 
