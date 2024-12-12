@@ -15,27 +15,27 @@ const router = createRouter({
     {
       path: '/agency/getting-started/create-token',
       name: 'agency_gettingstarted_createtoken',
-      component: () => import('../views/agency/CreateToken.vue'),
+      component: () => import('../views/agency/getting-started/CreateToken.vue'),
     },
     {
       path: '/agency/user-client/create-user-client',
       name: 'agency_userclient_createuserclient',
-      component: () => import('../views/agency/CreateClient.vue')
+      component: () => import('../views/agency/user-client/CreateClient.vue')
     },
     {
       path: '/agency/user-client/update-user-client',
       name: 'agency_userclient_updateuserclient',
-      component: () => import('../views/agency/UpdateClient.vue')
+      component: () => import('../views/agency/user-client/UpdateClient.vue')
     },
     {
       path: '/agency/user-client/login-sso-client',
       name: 'agency_userclient_loginssoclient',
-      component: () => import('../views/agency/LoginSsoClient.vue')
+      component: () => import('../views/agency/user-client/LoginSsoClient.vue')
     },
     {
       path: '/agency/campaign/create-campaign',
       name: 'agency_campaign_createcampaign',
-      component: () => import('../views/agency/CreateCampaign.vue')
+      component: () => import('../views/agency/campaign/CreateCampaign.vue')
     },
   ],
 })
